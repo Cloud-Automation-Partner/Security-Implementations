@@ -1,6 +1,6 @@
 # Security Implementation Ec2 & Docker
 
-This README provides an overview of the security implementations on your AWS EC2 Linux instance running a Dockerized application. The security measures include the use of Fail2Ban for Nginx and SSH, AWS Web Application Firewall (WAF), and ModSecurity with the OWASP Core Rule Set.
+This README provides an overview of the security implementations on your AWS EC2 Linux instance running a Dockerized application. The security measures include the use of Fail2Ban for Nginx and SSH, AWS Web Application Firewall (WAF), ModSecurity with the OWASP Core Rule Set, and CloudWatch for monitoring and logging.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ This README provides an overview of the security implementations on your AWS EC2
    - [Fail2Ban](#fail2ban)
    - [AWS WAF](#aws-waf)
    - [ModSecurity with OWASP Core Rule Set](#modsecurity-with-owasp-core-rule-set)
+   - [CloudWatch for Monitoring and Logging](#cloudwatch-for-monitoring-and-logging)
 3. [Before Implementation Results](#before-implementation-results)
 4. [After Implementation Results](#after-implementation-results)
 
@@ -47,6 +48,14 @@ ModSecurity, along with the OWASP Core Rule Set (CRS), has been implemented as a
 - **Docker Image**: The ModSecurity Docker image with the OWASP CRS is pulled from the Docker Hub (`owasp/modsecurity-crs`) and integrated into the Vue.js Alpine container.
 
 - **Configuration**: The ModSecurity configuration files are present in the `/etc/modsecurity/` directory. Adjustments can be made in the `modsecurity.conf` file.
+
+### CloudWatch for Monitoring and Logging
+
+CloudWatch is configured to monitor and log Nginx container activities. The Nginx container logs are stored in a persistent volume accessible by CloudWatch for centralized logging.
+
+- **Configuration**: The CloudWatch logging configuration can be managed through the AWS Management Console.
+
+- **Persistent Volume**: The persistent volume for Nginx logs is configured to allow CloudWatch to access and collect logs for monitoring purposes.
 
 ## Before Implementation Results
 
