@@ -111,6 +111,25 @@ filter = nginx
 logpath = /var/log/nginx/*.log
 maxretry = 3
 ```
+#### Nginx Logs Mapping using Persistent Volume:
+As in my case i am running my application in Dockers containers so I have added the persistent volume to store the Nginx logs permanently and pointed these logs in /var/log/nginx/*.log  
+To achieve the same change your docker-compose.yml and the below configs in it
+```yml
+frontend:
+    image: docker_hub_account/timebot-be:frontend
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ssl_data:/etc/letsencrypt
+      - nginx_data:/var/log/nginx
+volumes:
+  nginx_data:
+
+```
+
 #### Restart Fail2Ban
 - Restart the Fail2Ban service to apply the changes.
 ```bash
