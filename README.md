@@ -112,8 +112,7 @@ logpath = /var/log/nginx/*.log
 maxretry = 3
 ```
 #### Nginx Logs Mapping using Persistent Volume:
-As in my case i am running my application in Dockers containers so I have added the persistent volume to store the Nginx logs permanently and pointed these logs in /var/log/nginx/*.log  
-To achieve the same change your docker-compose.yml and the below configs in it
+As in my case i am running my application in Dockers containers so I have added the persistent volume to store the Nginx logs permanently and pointed these logs in /var/log/nginx/*.log to achieve the same please change your docker-compose.yml and add the below configs in it.
 ```yml
 frontend:
     image: docker_hub_account/timebot-be:frontend
@@ -123,7 +122,6 @@ frontend:
       - "80:80"
       - "443:443"
     volumes:
-      - ssl_data:/etc/letsencrypt
       - nginx_data:/var/log/nginx
 volumes:
   nginx_data:
@@ -159,10 +157,77 @@ For Implementing the AWS WAF we first need to implement the AWS elastic load bal
 
 ### ModSecurity with OWASP Core Rule Set
 
-ModSecurity, along with the OWASP Core Rule Set (CRS), has been implemented as a web application firewall to protect against various web application attacks.
+ModSecurity, along with the OWASP Core Rule Set (CRS), has been implemented as a web application firewall to protect against various web application attacks.  
+Here are two options to implement this according to your requirements.  
 
-- **Docker Image**: The ModSecurity Docker image with the OWASP CRS is pulled from the Docker Hub (`owasp/modsecurity-crs`) and integrated into the Vue.js Alpine container.
+- Option 1: For alpine images build the fully customized nginx with modsecurity with Dockerfile according to the requirements.
+- Option 2: We can also use the docker image build by the OWASP for Nginx with modsecurity
 
+Note: The option 1 is for fully customising the nginx and modsecurity as the modsecurity is simply offered with the Nginx Plus 
+  
+We will visit the both solutions:    
+
+#### Option 1: Building the Nginx with Modsec and OWASP
+To follow this option copy the below files from this repo to the root of your projet 
+- modsec folder
+- Dockerfile
+- default.conf
+- nginx.conf
+
+and run
+```bash
+docker build -t nginx-modsec:latest .
+```
+Now First run a test container with newly created image
+```bash
+docker run --name modsec-nginx-test -p 80:80 nginx-modsec:latest
+```
+Now test this solution
+
+#### Option 2: Use the OWASP created Docker image
+
+- **Docker Image**: The ModSecurity Docker image with the OWASP CRS is pulled from the Docker Hub (`owasp/modsecurity-crs`) and integrated into my Vue.js Alpine container.
+For achieving this add follow the below Dockerfile and modify this according to your needs
+
+```yml
+# Use an official Node runtime as the parent image
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json before other files
+# Utilize Docker cache to save re-installing dependencies if unchanged
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Set the host for the development server to 0.0.0.0 so it can accept connections from any IP address
+ENV HOST=0.0.0.0
+
+# Build the app
+RUN npm run build
+
+# Use a production-ready server like Nginx to serve the app
+FROM owasp/modsecurity-crs:nginx-alpine
+COPY --from=0 /app/dist /usr/share/nginx/html
+
+
+COPY default.conf /etc/nginx/conf.d/timebot.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+```
+You can test this image as well by running below
+```bash
+docker run --name modsec-nginx-test -p 80:80 nginx-modsec:latest
+```
 - **Configuration**: The ModSecurity configuration files are present in the `/etc/modsecurity/` directory. Adjustments can be made in the `modsecurity.conf` file.
 
 ### CloudWatch for Monitoring and Logging
