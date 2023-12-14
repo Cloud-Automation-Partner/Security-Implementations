@@ -207,8 +207,30 @@ Now copy tha DNS entries from here and add these in your domain DNS and your SSL
 After selecting the SSL certs in your ELB on the bottom review your selctions and click "Create Load Balancer"  button.   
 Now point your domain to the ELB by getting the ELB dns and addding that in yoiur domain DNS to route your all traffic to the ELB.  
 
-You aer all set to go for AWS Web Application Firewall
-- **Rules and Conditions**: Custom rules and conditions have been set up to filter and block malicious traffic based on specified conditions.
+You are all set to go for AWS Web Application Firewall  
+
+Go to "WAF & Shield" in AWS click Web ACLs ->Select region ->Create web ACL 
+After selecting your region enter the name for your WAF
+<img width="850" alt="Screenshot 2023-12-14 at 3 56 12 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e7692337-d7a6-4416-a7b7-cb4666263e08">  
+
+Click add resources  
+<img width="850" alt="Screenshot 2023-12-14 at 3 57 57 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/51f39130-2536-42ee-9b41-5aa11fdd2ac7">  
+
+Select application load balancer and select your required ELB and select Add and then click Next
+<img width="850" alt="Screenshot 2023-12-14 at 4 16 08 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/56fb7fce-36e6-42c1-bffb-92d88316cdbd">  
+
+Add rule groups here add rules ->Add managed rule groups -> Select any managed rule groups that suits you and click "Add rules"  
+<img width="850" alt="Screenshot 2023-12-14 at 4 16 42 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/20d2149b-56a0-4049-9000-ed874ae2a7c1">
+
+Now leave the rest to ddefault enable for no matching request and click "Next" and prioritize your rules here and click "next"
+<img width="850" alt="Screenshot 2023-12-14 at 4 31 22 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/cd61b74c-b950-4943-bcd3-fcb5b8297ffa">
+
+Configure your cloud watch metrics for the rules you want and enable or disable the sampled requests  
+<img width="850" alt="Screenshot 2023-12-14 at 4 33 02 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/2b769fed-d8d8-4fc2-b206-7f06b29a6ef0">
+
+Now click "Next" to review your Web ACL and click "create Web ACL"   
+
+Your application firewall is successfully implemented now and you can modify the rule groups or any other connfigs according to your requirements
 
 ### ModSecurity with OWASP Core Rule Set
 
