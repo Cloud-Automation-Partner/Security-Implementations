@@ -21,7 +21,6 @@ Before implementing the security measures, ensure that the following prerequisit
 - Docker installed on the EC2 instance.
 - Dockerized application deployed on the EC2 instance.
 - Access to AWS WAF for configuration.
-- Docker images for Fail2Ban, Nginx, ModSecurity, and Vue.js Alpine.
 
 ## Security Implementations
 
@@ -159,13 +158,15 @@ Enter the name for your ELB
 Select the VPC in which you wanted to create the ELB and select the availability zones for the ELB
 <img width="850" alt="Screenshot 2023-12-14 at 12 21 38 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/024eaa9b-5993-4046-ba62-6bc26e8dc626">  
 
-Now select the security groups for your ELB (We can select one or many from the check box)
+Now select the security groups for your ELB (We can select one or upto five security groups from the drop down menu)
 <img width="850" alt="Screenshot 2023-12-14 at 12 22 54 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/36b72dac-6e0b-442a-a29c-c71f594bd8f6">    
 
 Click on dropdown in the listners tab and select the https:443 this will be the default port for your ELB to accept communication on and for securing your ELB communication use 443 for secure connections and select your target group
 <img width="850" alt="Screenshot 2023-12-14 at 12 23 46 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/45f89b1a-d620-41ac-b4c7-5d9adcc88159">
 
-If you do not have any target groups then follow the below    
+If you do not have any target groups then follow the below  
+
+### Creating Target Group  
 
 **Optional:** For creating the new target group clikck the "Create new Target group"   
 
@@ -181,7 +182,7 @@ Select the VPC for your target group (Must be the same as ELB) and leave the pro
 Leave the health check section as recommended and select "Next"
 <img width="850" alt="Screenshot 2023-12-14 at 12 38 26 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/a8ea8357-1268-484a-ad99-f0a8a45b8399">  
 
-Select the EC2 instances here you wanted to add in the ELB (Can  be multiple) in this section and click "Includde as pending below"  
+Select the EC2 instances here you wanted to add in the ELB (Can  be multiple) in this section and click "Include as pending below"  
 <img width="850" alt="Screenshot 2023-12-14 at 12 51 14 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/f2a5d0ae-fd23-469d-a7de-b1314460e728">
 
 Select "add pending target" and select "create target group"    
@@ -189,12 +190,13 @@ Select "add pending target" and select "create target group"
 
 Now visit back the ELB creation page and reload the target group section your target group will be shown in the dropdwon menu
 
-In secure listners section use the default recommended and select the SSL certificates for your ELB if you ahve any existing SSL certs you can imort these in AWS or you can simply get the one from the AWS ACM
+In secure listners section use the default recommended and select the SSL certificates for your ELB if you have any existing SSL certs you can imort these in AWS or you can simply get the one from the AWS ACM
 <img width="850" alt="Screenshot 2023-12-14 at 12 25 09 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/64500b84-f8eb-4303-a2df-f8517ad98b1f">
 
-**Optional:** To get the SSL certs from ACM Go to Certificate Manager ->request Certificates ->Request a public certificate  
+### Request SSL Certs
+**Optional:** To get the SSL certs from ACM Go to Certificate Manager ->Request Certificates ->Request a public certificate  
 
-Enter your domain name  and select the validation method select DNS validation
+Enter your domain name  and in the validation method select DNS validation
 <img width="850" alt="Screenshot 2023-12-14 at 2 27 21 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/6388fc0f-c526-4c92-b095-be041478f120">
 
 Select key algorithm type and select Request certificates  
@@ -202,12 +204,12 @@ Select key algorithm type and select Request certificates
 
 Now copy tha DNS entries from here and add these in your domain DNS and your SSL certs will be issued after a short time
   
-**You are done with AWS SSL certs**
+**You are done with AWS SSL certs, Continue to ELB**
 
 After selecting the SSL certs in your ELB on the bottom review your selctions and click "Create Load Balancer"  button.   
-Now point your domain to the ELB by getting the ELB dns and addding that in yoiur domain DNS to route your all traffic to the ELB.  
+Now point your domain to the ELB by getting the ELB dns and addding that in your domain DNS to route your all traffic to the ELB.  
 
-You are all set to go for AWS Web Application Firewall  
+### Setup AWS Web Application Firewall  
 
 Go to "WAF & Shield" in AWS click Web ACLs ->Select region ->Create web ACL 
 After selecting your region enter the name for your WAF
