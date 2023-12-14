@@ -228,9 +228,9 @@ Now leave the rest to ddefault enable for no matching request and click "Next" a
 Configure your cloud watch metrics for the rules you want and enable or disable the sampled requests  
 <img width="850" alt="Screenshot 2023-12-14 at 4 33 02 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/2b769fed-d8d8-4fc2-b206-7f06b29a6ef0">
 
-Now click "Next" to review your Web ACL and click "create Web ACL"   
+Now click "Next" to review your Web ACL and after analysing if everything is fine then click "Create Web ACL"   
 
-Your application firewall is successfully implemented now and you can modify the rule groups or any other connfigs according to your requirements
+Your application firewall is successfully implemented now and you can modify the rule groups or any other connfigs according to your requirements you can check the logs metrics on the cloud watch for the WAF
 
 ### ModSecurity with OWASP Core Rule Set
 
