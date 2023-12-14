@@ -1,4 +1,4 @@
-# Security Implementation Ec2 & Docker
+# Security Implementation EC2 & Docker
 
 This README provides an overview of the security implementations on your AWS EC2 Linux instance running a Dockerized application. The security measures include the use of Fail2Ban for Nginx and SSH, AWS Web Application Firewall (WAF), ModSecurity with the OWASP Core Rule Set, and CloudWatch for monitoring and logging.
 
