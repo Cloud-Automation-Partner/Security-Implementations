@@ -151,8 +151,58 @@ For Implementing the AWS WAF we first need to implement the AWS elastic load bal
 
  ### Implementing ELB
 
- Go to AWS console->EC2->Load Balancer->Create Load Balancer and now select the Application load balancer
+ Go to AWS console->EC2->Load Balancer->Create Load Balancer and now select the Application load balancer and click Create
 
+Enter the name for your ELB  
+ <img width="850" alt="Screenshot 2023-12-14 at 12 20 47 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/1f5b3c75-6d19-43cd-ad46-f1a2c3fc9ac6">
+
+Select the VPC in which you wanted to create the ELB  
+<img width="900" alt="Screenshot 2023-12-14 at 12 21 38 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/024eaa9b-5993-4046-ba62-6bc26e8dc626">  
+
+Now select the security groups for your ELB (We can select one or many from the check box)
+<img width="900" alt="Screenshot 2023-12-14 at 12 22 54 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/36b72dac-6e0b-442a-a29c-c71f594bd8f6">    
+
+Click on dropdown in the listners tab and select the https:443 this will be the default port for your ELB to accept communication on and for securing your ELB communication use 443 for secure connections and select your target group
+<img width="900" alt="Screenshot 2023-12-14 at 12 23 46 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/45f89b1a-d620-41ac-b4c7-5d9adcc88159">
+
+If you do not have any target groups then follow the below    
+
+**Optional:** For creating the new target group clikck the "Create new Target group"   
+
+Now select "instances" in the target group section  
+<img width="750" alt="Screenshot 2023-12-14 at 12 26 29 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/d2412208-5c6e-4923-8e8b-9f7335420d55">  
+
+Enter your target group name and select the port on which you wanted the ELB to communicate with your server (For further enhanced security you can implement SSL certs to your server and make it to communicate on the https:443 it will increase another layer of security)
+<img width="750" alt="Screenshot 2023-12-14 at 12 40 44 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/91e1572f-8ada-4c64-b083-bb4475946072">
+
+Select the VPC for your target group (Must be the same as ELB) and leave the protocol version as it is.
+<img width="750" alt="Screenshot 2023-12-14 at 12 40 58 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/bb3a75e7-6747-4ddc-9a95-2ae607d96a49">
+
+Leave the health check section as recommended and select "Next"
+<img width="750" alt="Screenshot 2023-12-14 at 12 38 26 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/a8ea8357-1268-484a-ad99-f0a8a45b8399">  
+
+Select the EC2 instances here you wanted to add in the ELB (Can  be multiple) in this section and click "Includde as pending below"  
+<img width="1294" alt="Screenshot 2023-12-14 at 12 51 14 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/f2a5d0ae-fd23-469d-a7de-b1314460e728">
+
+Select "add pending target" and select "create target group"    
+<img width="1294" alt="Screenshot 2023-12-14 at 12 50 32 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/74a4ae9e-67fe-4203-a3d2-2b7c26d6d090">
+
+Now visit back the ELB creation page and reload the target group section your target group will be shown in the dropdwon menu
+
+In secure listners section use the default recommended and select the SSL certificates for your ELB if you ahve any existing SSL certs you can imort these in AWS or you can simply get the one from the AWS ACM
+<img width="959" alt="Screenshot 2023-12-14 at 12 25 09 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/64500b84-f8eb-4303-a2df-f8517ad98b1f">
+
+**Optional:** To get the SSL certs from ACM Go to Certificate Manager ->request Certificates ->Request a public certificate  
+
+Enter your domain name  andd select the validation method select DNS validation
+<img width="982" alt="Screenshot 2023-12-14 at 2 27 21 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/6388fc0f-c526-4c92-b095-be041478f120">
+
+Select key algorithm type and select Request certificates  
+<img width="982" alt="Screenshot 2023-12-14 at 2 27 41 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/dfda9ed5-f86d-45e8-a1db-6364c4f2ac9f">
+
+Now copy tha DNS enntries from here and add tgese in your domain DNS
+
+After selecting the SSL certs in your ELB on the bottom review your selctions and click "Create Load Balancer"  button.
 - **Rules and Conditions**: Custom rules and conditions have been set up to filter and block malicious traffic based on specified conditions.
 
 ### ModSecurity with OWASP Core Rule Set
