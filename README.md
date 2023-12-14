@@ -253,7 +253,7 @@ To follow this option copy the below files from this repo to the root of your pr
 - default.conf
 - nginx.conf
 
-and run
+Run
 ```bash
 docker build -t nginx-modsec:latest .
 ```
