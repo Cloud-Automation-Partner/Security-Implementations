@@ -230,6 +230,40 @@ docker run --name modsec-nginx-test -p 80:80 nginx-modsec:latest
 ```
 - **Configuration**: The ModSecurity configuration files are present in the `/etc/modsecurity/` directory. Adjustments can be made in the `modsecurity.conf` file.
 
+## Before Implementation Results
+
+Before implementing the security measures, assess the server's security posture and record relevant metrics.  
+
+A basic testing can be done usig the below commands
+```bash
+curl -X GET "https://domain_url/page?param=<script>alert('XSS')</script>"
+```
+```bash
+curl -X GET -d "username=admin' OR '1'='1'&password=password" https://domain_url/login
+```
+It will  return the below outputs respectively
+<img width="1680" alt="Screenshot 2023-12-13 at 12 53 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/79a38d7b-1719-4968-b98f-f4a5203508fd">
+
+<img width="1654" alt="Screenshot 2023-12-13 at 12 59 48 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/fe52755d-f96e-43d3-b138-58a912bd6b18">
+
+## After Implementation Results
+
+After implementing the security measures, reassess the server's security posture and record the improvements.  
+
+Again run the same above commands
+```bash
+curl -X GET "https://domain_url/page?param=<script>alert('XSS')</script>"
+```
+```bash
+curl -X GET -d "username=admin' OR '1'='1'&password=password" https://domain_url/login
+```
+This time the results will be the different  
+<img width="871" alt="Screenshot 2023-12-13 at 12 59 05 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/6122ef76-22f2-42d0-80b2-9e471c0ca955">
+
+<img width="758" alt="Screenshot 2023-12-14 at 11 50 17 AM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e7708727-44f4-4aab-a446-602ac1dc761e">
+
+
+
 ### CloudWatch for Monitoring and Logging
 
 CloudWatch is configured to monitor and log Nginx container activities. The Nginx container logs are stored in a persistent volume accessible by CloudWatch for centralized logging.
@@ -237,18 +271,6 @@ CloudWatch is configured to monitor and log Nginx container activities. The Ngin
 - **Configuration**: The CloudWatch logging configuration can be managed through the AWS Management Console.
 
 - **Persistent Volume**: The persistent volume for Nginx logs is configured to allow CloudWatch to access and collect logs for monitoring purposes.
-
-## Before Implementation Results
-
-Before implementing the security measures, assess the server's security posture and record relevant metrics. This may include logs of failed login attempts, Nginx access logs, and any other relevant information.
-
-Add any specific metrics, logs, or details relevant to your application and infrastructure.
-
-## After Implementation Results
-
-After implementing the security measures, reassess the server's security posture and record the improvements. Include metrics such as reduced failed login attempts, blocked malicious IP addresses, and any other relevant information.
-
-Compare the results with the before-implementation metrics to gauge the effectiveness of the implemented security measures.
 
 ## Conclusion
 
