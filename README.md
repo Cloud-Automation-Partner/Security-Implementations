@@ -337,9 +337,9 @@ curl -X GET "https://domain_url/page?param=<script>alert('XSS')</script>"
 curl -X GET -d "username=admin' OR '1'='1'&password=password" https://domain_url/login
 ```
 This time the results will be the different  
-<img width="800" alt="Screenshot 2023-12-13 at 12 59 05 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/6122ef76-22f2-42d0-80b2-9e471c0ca955">
+<img width="850" alt="Screenshot 2023-12-13 at 12 59 05 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/6122ef76-22f2-42d0-80b2-9e471c0ca955">
 
-<img width="800" alt="Screenshot 2023-12-14 at 11 50 17 AM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e7708727-44f4-4aab-a446-602ac1dc761e">
+<img width="850" alt="Screenshot 2023-12-14 at 11 50 17 AM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e7708727-44f4-4aab-a446-602ac1dc761e">
 
 
 
@@ -450,31 +450,31 @@ Now after a short time it will start sending your configured matrics to the clou
 
 Go to AWS Console -> Cloud Watch -> metrics ->All metrics ->custom namespaces  and select any metric group to check that
 
-<img width="1400" alt="Screenshot 2023-12-15 at 3 50 58 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/f3b8a79b-3e14-46bc-9836-727455b2ff0b">  
+<img width="850" alt="Screenshot 2023-12-15 at 3 50 58 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/f3b8a79b-3e14-46bc-9836-727455b2ff0b">  
 
 once these are visible you can set alarms for your server metrics along with SNS that will send you the Email or SMS notifications  
 
 #### Creating Alarms with trigger to AWS SNS  
 
 To create alarms go to the AWS ->Cloud Watch ->Alarms ->All Alarms ->Create Alarms ->Select Metric  ->CWAgent and select any metric group  
-<img width="1133" alt="Screenshot 2023-12-15 at 4 00 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/8f173edd-995c-4d0c-a1e2-b3a739e4e001">  
+<img width="850" alt="Screenshot 2023-12-15 at 4 00 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/8f173edd-995c-4d0c-a1e2-b3a739e4e001">  
 
 Now select the any metric you wanted to set alarm for in my case I am setting this for the Disk space usage  
-<img width="1502" alt="Screenshot 2023-12-15 at 4 02 16 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/563a257f-7cc9-43fb-8e78-4c2a940ffd18">
+<img width="850" alt="Screenshot 2023-12-15 at 4 02 16 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/563a257f-7cc9-43fb-8e78-4c2a940ffd18">
 
 After clicking select metric it will show you the Alarm configuration page  
-<img width="733" alt="Screenshot 2023-12-15 at 4 06 45 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/3b52d5a6-5d9f-43ad-a522-530fd634e42f">  
+<img width="850" alt="Screenshot 2023-12-15 at 4 06 45 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/3b52d5a6-5d9f-43ad-a522-530fd634e42f">  
 
 Verify the configs for Alarm and if any modification is required you can channge it accordingly and in the conditions tab select Static ->Graeter and enter the threshold value you wnat to trigger the alarm and click Next (you can also set the timer for the situation in this phase).   
-<img width="739" alt="Screenshot 2023-12-15 at 4 07 07 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/40083255-b1c2-4808-9b40-47e6b4471a2b">  
+<img width="850" alt="Screenshot 2023-12-15 at 4 07 07 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/40083255-b1c2-4808-9b40-47e6b4471a2b">  
 
 Then in the notifications section select In Alarm ->Create new SNS topic(If don't have any existing) -> Topic name and enter the email on which you wnated to get the notifications of any anomaly -> Create Topic and select Next
 
-<img width="739" alt="Screenshot 2023-12-15 at 6 33 09 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/991779cd-6a87-40c9-8080-7fe8a0077ae6">
+<img width="850" alt="Screenshot 2023-12-15 at 6 33 09 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/991779cd-6a87-40c9-8080-7fe8a0077ae6">
 
 In this page enter the naem for your Alarm and Add the any description for the email and then press Next and After reviewing the Details press Create Alarm  
   
-<img width="821" alt="Screenshot 2023-12-15 at 6 38 11 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e85f7f7c-114f-4d01-ad1e-fd237f803186">
+<img width="850" alt="Screenshot 2023-12-15 at 6 38 11 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e85f7f7c-114f-4d01-ad1e-fd237f803186">
 
 Your CloudWatch monitoring along with the SNS topic to send notifications is setup now you can test the solution
 
