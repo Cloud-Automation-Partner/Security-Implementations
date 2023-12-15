@@ -347,9 +347,195 @@ This time the results will be the different
 
 CloudWatch is configured to monitor and log Nginx container activities. The Nginx container logs are stored in a persistent volume accessible by CloudWatch for centralized logging.
 
-- **Configuration**: The CloudWatch logging configuration can be managed through the AWS Management Console.
+#### Monitoring: 
 
-- **Persistent Volume**: The persistent volume for Nginx logs is configured to allow CloudWatch to access and collect logs for monitoring purposes.
+**Step 1:** Install and Configure the CloudWatch Agent  
+
+Download the CloudWatch Agent:
+```bash
+sudo yum update -y
+sudo yum install amazon-cloudwatch-agent
+```
+Configure the CloudWatch Agent:
+```bash
+vim /opt/aws/amazon-cloudwatch-agent/bin/config.json
+```
+Copy and paste the below json in the file now  
+```json
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "cwagent"
+  },
+  "metrics": {
+    "append_dimensions": {
+      "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+      "InstanceId": "${aws:InstanceId}",
+      "InstanceType": "${aws:InstanceType}"
+    },
+    "metrics_collected": {
+      "mem": {
+        "measurement": [
+          "mem_used_percent"
+        ]
+      },
+      "swap": {
+        "measurement": [
+          "swap_used_percent"
+        ]
+      },
+      "cpu": {
+        "totalcpu": false,
+        "measurement": [
+          "cpu_usage_idle",
+          "cpu_usage_iowait",
+          "cpu_usage_user",
+          "cpu_usage_system"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ]
+      },
+      "disk": {
+        "measurement": [
+          "used_percent",
+          "inodes_free"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ]
+      }
+    }
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/nginx/access.log",
+            "log_group_name": "NginxAccessLogs",
+            "log_stream_name": "{instance_id}"
+          },
+          {
+            "file_path": "/var/log/nginx/error.log",
+            "log_group_name": "NginxErrorLogs",
+            "log_stream_name": "{instance_id}"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+Run below command to bootstrap the ClouWatch Agent this will automatically place the config file and test the configs
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+```
+Check the Cloud Watch agent status now 
+```bash
+systemctl status amazon-cloudwatch-agent
+```
+Check the Cloudwatch config status  
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
+```
+Below commands can also be used for starting and stopping the clouwatch metrics  
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a start
+```
+Now after a short time it will start sending your configured matrics to the cloudwatch and you can chek your server metrics by following the below    
+
+Go to AWS Console -> Cloud Watch -> metrics ->All metrics ->custom namespaces  and select any metric group to check that
+
+<img width="1400" alt="Screenshot 2023-12-15 at 3 50 58 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/f3b8a79b-3e14-46bc-9836-727455b2ff0b">  
+
+once these are visible you can set alarms for your server metrics along with SNS that will send you the Email or SMS notifications  
+
+#### Creating Alarms with trigger to AWS SNS  
+
+To create alarms go to the AWS ->Cloud Watch ->Alarms ->All Alarms ->Create Alarms ->Select Metric  ->CWAgent and select any metric group  
+<img width="1133" alt="Screenshot 2023-12-15 at 4 00 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/8f173edd-995c-4d0c-a1e2-b3a739e4e001">  
+
+Now select the any metric you wanted to set alarm for in my case I am setting this for the Disk space usage  
+<img width="1502" alt="Screenshot 2023-12-15 at 4 02 16 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/563a257f-7cc9-43fb-8e78-4c2a940ffd18">
+
+After clicking select metric it will show you the Alarm configuration page  
+<img width="733" alt="Screenshot 2023-12-15 at 4 06 45 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/3b52d5a6-5d9f-43ad-a522-530fd634e42f">  
+
+Verify the configs for Alarm and if any modification is required you can channge it accordingly
+
+#### Logging:  
+
+We have implemented Nginx logs to be published to the CloudWacth  
+
+**Quick Steps**  
+1- Attaching an IAM Role to instance  
+2- Install CloudWatch Logs Agent  
+3- Configure CloudWatch Logs Agent  
+
+**Step 1: Attaching an IAM Role to instance**    
+
+From AWS EC2 Console page, right click the selected instance →Instance Settings →Attach/Replace IAM Role, if you haven’t created the IAM Role, create a new one or append to existing role as the following policy actions:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Effect": "Allow",
+        "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:DescribeLogStreams"
+        ],
+        "Resource": [
+            "arn:aws:logs:*:*:*"
+        ]
+    }]
+}
+```
+**Step 2: Install CloudWatch Logs Agent**  
+
+```bash
+yum install awslogs
+systemctl start awslogsd.service 
+systemctl enabled awslogsd.service
+```
+Go to /etc/awslogs and make changes to awscli.conf file, change region were your EC2 Instance is located eg: us-east-1    
+
+```bash
+vim /etc/awscli.conf
+```
+
+**Step 3: Configure CloudWatch Logs Agent**  
+
+Edit /var/awslogs/etc/awslogs.conf file which will have default log path from previous step, you can just remove that and only have NGINX logs path setup as shown below:   
+
+```ini
+[/var/log/nginx/access.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/nginx/access.log
+buffer_duration = 5000
+log_stream_name = access.log
+initial_position = end_of_file
+log_group_name = /ec2/nginx/logs
+
+[/var/log/nginx/error.log]
+datetime_format = %Y/%m/%d %H:%M:%S
+file = /var/log/nginx/error.log
+buffer_duration = 5000
+log_stream_name = error.log
+initial_position = end_of_file
+log_group_name = /ec2/nginx/logs
+```
+Last step is by restarting the service:
+```bash
+sudo service awslogs restart
+```
+- **Persistent Volume**: The persistent volume for Nginx logs is configured to allow CloudWatch to access and collect logs from containers for monitoring purposes.
 
 ## Conclusion
 
