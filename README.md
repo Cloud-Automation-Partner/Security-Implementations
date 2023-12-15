@@ -465,7 +465,18 @@ Now select the any metric you wanted to set alarm for in my case I am setting th
 After clicking select metric it will show you the Alarm configuration page  
 <img width="733" alt="Screenshot 2023-12-15 at 4 06 45 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/3b52d5a6-5d9f-43ad-a522-530fd634e42f">  
 
-Verify the configs for Alarm and if any modification is required you can channge it accordingly
+Verify the configs for Alarm and if any modification is required you can channge it accordingly and in the conditions tab select Static ->Graeter and enter the threshold value you wnat to trigger the alarm and click Next (you can also set the timer for the situation in this phase).   
+<img width="739" alt="Screenshot 2023-12-15 at 4 07 07 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/40083255-b1c2-4808-9b40-47e6b4471a2b">  
+
+Then in the notifications section select In Alarm ->Create new SNS topic(If don't have any existing) -> Topic name and enter the email on which you wnated to get the notifications of any anomaly -> Create Topic and select Next
+
+<img width="739" alt="Screenshot 2023-12-15 at 6 33 09 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/991779cd-6a87-40c9-8080-7fe8a0077ae6">
+
+In this page enter the naem for your Alarm and Add the any description for the email and then press Next and After reviewing the Details press Create Alarm  
+  
+<img width="821" alt="Screenshot 2023-12-15 at 6 38 11 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/e85f7f7c-114f-4d01-ad1e-fd237f803186">
+
+Your CloudWatch monitoring along with the SNS topic to send notifications is setup now you can test the solution
 
 #### Logging:  
 
