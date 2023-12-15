@@ -321,9 +321,9 @@ curl -X GET "https://domain_url/page?param=<script>alert('XSS')</script>"
 curl -X GET -d "username=admin' OR '1'='1'&password=password" https://domain_url/login
 ```
 It will  return the below outputs respectively
-<img width="1650" alt="Screenshot 2023-12-13 at 12 53 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/79a38d7b-1719-4968-b98f-f4a5203508fd">
+<img width="850" alt="Screenshot 2023-12-13 at 12 53 53 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/79a38d7b-1719-4968-b98f-f4a5203508fd">
 
-<img width="1650" alt="Screenshot 2023-12-13 at 12 59 48 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/fe52755d-f96e-43d3-b138-58a912bd6b18">
+<img width="850" alt="Screenshot 2023-12-13 at 12 59 48 PM" src="https://github.com/Cloud-Automation-Partner/Security-Implementations/assets/151637997/fe52755d-f96e-43d3-b138-58a912bd6b18">
 
 ## After Implementation Results
 
